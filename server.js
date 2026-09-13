@@ -27,11 +27,44 @@ const MIME_TYPES = {
   '.ttf': 'font/ttf'
 };
 
+function findStaticFile(pathname) {
+  if (pathname === '/' || pathname === '' || pathname === '/server.js' || pathname === '/server') {
+    pathname = '/index.html';
+  }
+
+  const safePath = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, '').replace(/^[\/\\]+/, '');
+
+  const searchDirs = [
+    path.join(ROOT_DIR, 'public'),
+    path.join(ROOT_DIR, 'dist'),
+    ROOT_DIR
+  ];
+
+  for (const dir of searchDirs) {
+    const candidate = path.join(dir, safePath);
+    if (fs.existsSync(candidate)) {
+      try {
+        const stats = fs.statSync(candidate);
+        if (stats.isFile()) {
+          return { filePath: candidate, stats };
+        }
+      } catch (e) {}
+    }
+  }
+
+  return null;
+}
 
 // Request Handler utama
 const handler = (req, res) => {
   const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   let pathname = decodeURIComponent(parsedUrl.pathname);
+
+  // Fallback matched path from Vercel edge
+  const matchedPath = req.headers['x-matched-path'];
+  if (matchedPath && matchedPath !== '/server.js' && matchedPath !== '/server') {
+    pathname = matchedPath;
+  }
 
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -50,53 +83,48 @@ const handler = (req, res) => {
     return;
   }
 
-  if (pathname === '/' || pathname === '') {
-    pathname = '/index.html';
+  const found = findStaticFile(pathname);
+  if (!found) {
+    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('404 Not Found');
+    return;
   }
 
-  const safePath = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, '');
-  const filePath = path.join(ROOT_DIR, safePath);
+  const { filePath, stats } = found;
+  const ext = path.extname(filePath).toLowerCase();
+  const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+  const totalSize = stats.size;
+  const range = req.headers.range;
 
-  fs.stat(filePath, (err, stats) => {
-    if (err || !stats.isFile()) {
-      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-      res.end('404 Not Found');
-      return;
-    }
+  if (range) {
+    const parts = range.replace(/bytes=/, '').split('-');
+    const start = parseInt(parts[0], 10);
+    const end = parts[1] ? parseInt(parts[1], 10) : totalSize - 1;
+    const chunksize = (end - start) + 1;
 
-    const ext = path.extname(filePath).toLowerCase();
-    const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-    const totalSize = stats.size;
-    const range = req.headers.range;
-
-    if (range) {
-      const parts = range.replace(/bytes=/, "").split("-");
-      const start = parseInt(parts[0], 10);
-      const end = parts[1] ? parseInt(parts[1], 10) : totalSize - 1;
-      const chunksize = (end - start) + 1;
-
-      res.writeHead(206, {
-        'Content-Range': `bytes ${start}-${end}/${totalSize}`,
-        'Accept-Ranges': 'bytes',
-        'Content-Length': chunksize,
-        'Content-Type': contentType
-      });
-      fs.createReadStream(filePath, { start, end }).pipe(res);
-    } else {
-      res.writeHead(200, {
-        'Content-Length': totalSize,
-        'Accept-Ranges': 'bytes',
-        'Content-Type': contentType,
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0'
-      });
-      fs.createReadStream(filePath).pipe(res);
-    }
-  });
+    res.writeHead(206, {
+      'Content-Range': `bytes ${start}-${end}/${totalSize}`,
+      'Accept-Ranges': 'bytes',
+      'Content-Length': chunksize,
+      'Content-Type': contentType
+    });
+    fs.createReadStream(filePath, { start, end }).pipe(res);
+  } else {
+    res.writeHead(200, {
+      'Content-Length': totalSize,
+      'Accept-Ranges': 'bytes',
+      'Content-Type': contentType,
+      'Cache-Control': 'public, max-age=3600'
+    });
+    fs.createReadStream(filePath).pipe(res);
+  }
 };
 
-const server = http.createServer(handler);
-server.listen(PORT, () => {
-  console.log(`Server lokal berjalan di http://localhost:${PORT}`);
-});
+module.exports = handler;
+
+if (require.main === module) {
+  const server = http.createServer(handler);
+  server.listen(PORT, () => {
+    console.log(`Server lokal berjalan di http://localhost:${PORT}`);
+  });
+}

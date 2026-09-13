@@ -1,8 +1,7 @@
 {
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/api/wishes", "dest": "/api/wishes.js" },
-    { "src": "/api/wishes/", "dest": "/api/wishes.js" },
-    { "src": "/(.*)", "dest": "/index.html" }
+  "outputDirectory": "public",
+  "rewrites": [
+    { "source": "/api/wishes", "destination": "/api/wishes.js" },
+    { "source": "/api/wishes/", "destination": "/api/wishes.js" }
   ]
 }
