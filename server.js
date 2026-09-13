@@ -60,8 +60,9 @@ function saveWishes(wishes) {
   }
 }
 
-const server = http.createServer((req, res) => {
-  const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+// Request Handler utama
+const handler = (req, res) => {
+  const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   let pathname = decodeURIComponent(parsedUrl.pathname);
 
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -171,26 +172,15 @@ const server = http.createServer((req, res) => {
       fs.createReadStream(filePath).pipe(res);
     }
   });
-});
+};
 
-function startServer(port) {
-  server.listen(port, () => {
-    console.log(`\n==============================================`);
-    console.log(`  Undangan Pernikahan Digital Berjalan!`);
-    console.log(`  URL Lokal: http://localhost:${port}`);
-    console.log(`  Contoh Tamu: http://localhost:${port}/?to=Budi+Santoso`);
-    console.log(`==============================================\n`);
-  });
-
-  server.on('error', (err) => {
-    if (err.code === 'EADDRINUSE') {
-      console.log(`Port ${port} sedang digunakan, mencoba port ${port + 1}...`);
-      startServer(port + 1);
-    } else {
-      console.error('Server error:', err);
-    }
+// Hanya jalankan server manual jika di lokal (bukan Vercel)
+if (!process.env.VERCEL) {
+  const server = http.createServer(handler);
+  server.listen(PORT, () => {
+    console.log(`Server berjalan di http://localhost:${PORT}`);
   });
 }
 
-startServer(PORT);
-module.exports = app;
+// Export handler untuk Vercel Serverless Function
+module.exports = handler;
