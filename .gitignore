@@ -1,0 +1,25 @@
+# =============================================
+# Git — File & Folder yang tidak perlu ditrack
+# =============================================
+
+# Folder output build (di-generate otomatis oleh npm run build)
+public/
+dist/
+
+# Log Node.js
+npm-debug.log*
+
+# Folder dependencies Node.js
+node_modules/
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+
+# Vercel local state
+.vercel/
+
+# OS
+.DS_Store
+Thumbs.db

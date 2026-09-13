@@ -1,3 +1,10 @@
+/**
+ * server.js — Server lokal untuk development.
+ * Melayani file statis (index.html, css, js, assets) dan API /api/wishes.
+ * Di Vercel: file statis disajikan dari public/ (output build),
+ *            /api/wishes.js dijalankan sebagai Serverless Function.
+ */
+
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -7,65 +14,54 @@ const ROOT_DIR = __dirname;
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
-  '.js': 'text/javascript; charset=utf-8',
+  '.css':  'text/css; charset=utf-8',
+  '.js':   'text/javascript; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
+  '.png':  'image/png',
+  '.jpg':  'image/jpeg',
   '.jpeg': 'image/jpeg',
-  '.gif': 'image/gif',
-  '.svg': 'image/svg+xml',
-  '.ico': 'image/x-icon',
+  '.gif':  'image/gif',
+  '.svg':  'image/svg+xml',
+  '.ico':  'image/x-icon',
   '.webp': 'image/webp',
-  '.mp3': 'audio/mpeg',
+  '.mp3':  'audio/mpeg',
   '.mpeg': 'audio/mpeg',
-  '.m4a': 'audio/mp4',
-  '.wav': 'audio/wav',
-  '.ogg': 'audio/ogg',
+  '.m4a':  'audio/mp4',
+  '.wav':  'audio/wav',
+  '.ogg':  'audio/ogg',
   '.woff': 'font/woff',
-  '.woff2': 'font/woff2',
-  '.ttf': 'font/ttf'
+  '.woff2':'font/woff2',
+  '.ttf':  'font/ttf',
 };
 
-function findStaticFile(pathname) {
-  if (pathname === '/' || pathname === '' || pathname === '/server.js' || pathname === '/server') {
-    pathname = '/index.html';
-  }
+/** Cari file statis di public/, lalu fallback ke root. */
+function resolveFile(pathname) {
+  if (pathname === '/' || pathname === '') pathname = '/index.html';
 
-  const safePath = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, '').replace(/^[\/\\]+/, '');
+  const safePath = path.normalize(pathname)
+    .replace(/^(\.\.[\/\\])+/, '')
+    .replace(/^[\/\\]+/, '');
 
-  const searchDirs = [
-    path.join(ROOT_DIR, 'public'),
-    path.join(ROOT_DIR, 'dist'),
-    ROOT_DIR
+  const candidates = [
+    path.join(ROOT_DIR, 'public', safePath),
+    path.join(ROOT_DIR, safePath),
   ];
 
-  for (const dir of searchDirs) {
-    const candidate = path.join(dir, safePath);
-    if (fs.existsSync(candidate)) {
-      try {
-        const stats = fs.statSync(candidate);
-        if (stats.isFile()) {
-          return { filePath: candidate, stats };
-        }
-      } catch (e) {}
-    }
+  for (const candidate of candidates) {
+    try {
+      const stats = fs.statSync(candidate);
+      if (stats.isFile()) return { filePath: candidate, stats };
+    } catch (_) {}
   }
 
   return null;
 }
 
-// Request Handler utama
-const handler = (req, res) => {
-  const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-  let pathname = decodeURIComponent(parsedUrl.pathname);
+function handler(req, res) {
+  const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+  const pathname = decodeURIComponent(url.pathname);
 
-  // Fallback matched path from Vercel edge
-  const matchedPath = req.headers['x-matched-path'];
-  if (matchedPath && matchedPath !== '/server.js' && matchedPath !== '/server') {
-    pathname = matchedPath;
-  }
-
+  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -76,14 +72,13 @@ const handler = (req, res) => {
     return;
   }
 
-  // REST API: Public Wishes Guestbook
-  if (pathname === '/api/wishes' || pathname === '/api/wishes/' || pathname === '/api/wishes.js' || pathname.startsWith('/api/wishes')) {
-    const wishesHandler = require('./api/wishes');
-    wishesHandler(req, res);
-    return;
+  // API buku tamu
+  if (pathname.startsWith('/api/wishes')) {
+    return require('./api/wishes')(req, res);
   }
 
-  const found = findStaticFile(pathname);
+  // File statis
+  const found = resolveFile(pathname);
   if (!found) {
     res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end('404 Not Found');
@@ -93,38 +88,32 @@ const handler = (req, res) => {
   const { filePath, stats } = found;
   const ext = path.extname(filePath).toLowerCase();
   const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-  const totalSize = stats.size;
+  const total = stats.size;
   const range = req.headers.range;
 
   if (range) {
-    const parts = range.replace(/bytes=/, '').split('-');
-    const start = parseInt(parts[0], 10);
-    const end = parts[1] ? parseInt(parts[1], 10) : totalSize - 1;
-    const chunksize = (end - start) + 1;
-
+    const [startStr, endStr] = range.replace(/bytes=/, '').split('-');
+    const start = parseInt(startStr, 10);
+    const end = endStr ? parseInt(endStr, 10) : total - 1;
     res.writeHead(206, {
-      'Content-Range': `bytes ${start}-${end}/${totalSize}`,
-      'Accept-Ranges': 'bytes',
-      'Content-Length': chunksize,
-      'Content-Type': contentType
+      'Content-Range':  `bytes ${start}-${end}/${total}`,
+      'Accept-Ranges':  'bytes',
+      'Content-Length': end - start + 1,
+      'Content-Type':   contentType,
     });
     fs.createReadStream(filePath, { start, end }).pipe(res);
   } else {
     res.writeHead(200, {
-      'Content-Length': totalSize,
-      'Accept-Ranges': 'bytes',
-      'Content-Type': contentType,
-      'Cache-Control': 'public, max-age=3600'
+      'Content-Length': total,
+      'Accept-Ranges':  'bytes',
+      'Content-Type':   contentType,
+      'Cache-Control':  'public, max-age=3600',
     });
     fs.createReadStream(filePath).pipe(res);
   }
-};
-
-module.exports = handler;
-
-if (require.main === module) {
-  const server = http.createServer(handler);
-  server.listen(PORT, () => {
-    console.log(`Server lokal berjalan di http://localhost:${PORT}`);
-  });
 }
+
+const server = http.createServer(handler);
+server.listen(PORT, () => {
+  console.log(`Server lokal berjalan di http://localhost:${PORT}`);
+});
