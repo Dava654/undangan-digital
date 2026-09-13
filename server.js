@@ -96,13 +96,7 @@ const handler = (req, res) => {
   });
 };
 
-// Hanya jalankan server manual jika di lokal (bukan Vercel)
-if (!process.env.VERCEL) {
-  const server = http.createServer(handler);
-  server.listen(PORT, () => {
-    console.log(`Server berjalan di http://localhost:${PORT}`);
-  });
-}
-
-// Export handler untuk Vercel Serverless Function
-module.exports = handler;
+const server = http.createServer(handler);
+server.listen(PORT, () => {
+  console.log(`Server lokal berjalan di http://localhost:${PORT}`);
+});

@@ -2,7 +2,6 @@
   "name": "undangan-pernikahan",
   "version": "1.0.0",
   "description": "Undangan Pernikahan Digital",
-  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js"
