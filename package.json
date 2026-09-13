@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "Undangan Pernikahan Digital",
   "scripts": {
-    "build": "echo ok",
-    "start": "node local-server.js",
-    "dev": "node local-server.js"
+    "start": "node server.js",
+    "dev": "node server.js"
   }
 }

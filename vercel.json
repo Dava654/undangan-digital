@@ -1,0 +1,8 @@
+{
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/api/wishes", "dest": "/api/wishes.js" },
+    { "src": "/api/wishes/", "dest": "/api/wishes.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
