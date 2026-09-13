@@ -77,7 +77,7 @@ const handler = (req, res) => {
   }
 
   // REST API: Public Wishes Guestbook
-  if (pathname === '/api/wishes' || pathname === '/api/wishes/') {
+  if (pathname === '/api/wishes' || pathname === '/api/wishes/' || pathname === '/api/wishes.js' || pathname.startsWith('/api/wishes')) {
     const wishesHandler = require('./api/wishes');
     wishesHandler(req, res);
     return;
