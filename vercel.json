@@ -1,23 +1,12 @@
 {
-    "version": 2,
-    "builds": [
-        {
-            "src": "server.js",
-            "use": "@vercel/node"
-        },
-        {
-            "src": "**",
-            "use": "@vercel/static"
-        }
-    ],
-    "routes": [
-        {
-            "src": "/api/wishes",
-            "dest": "/server.js"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/$1"
-        }
-    ]
+  "rewrites": [
+    {
+      "source": "/api/wishes",
+      "destination": "/api/wishes"
+    },
+    {
+      "source": "/api/wishes/",
+      "destination": "/api/wishes"
+    }
+  ]
 }

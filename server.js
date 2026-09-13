@@ -27,38 +27,6 @@ const MIME_TYPES = {
   '.ttf': 'font/ttf'
 };
 
-const DATA_DIR = path.join(ROOT_DIR, 'data');
-const WISHES_FILE = path.join(DATA_DIR, 'wishes.json');
-
-function getWishes() {
-  try {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
-    if (!fs.existsSync(WISHES_FILE)) {
-      fs.writeFileSync(WISHES_FILE, '[]', 'utf8');
-      return [];
-    }
-    const data = fs.readFileSync(WISHES_FILE, 'utf8');
-    return JSON.parse(data || '[]');
-  } catch (err) {
-    console.error('Error reading wishes:', err);
-    return [];
-  }
-}
-
-function saveWishes(wishes) {
-  try {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
-    fs.writeFileSync(WISHES_FILE, JSON.stringify(wishes, null, 2), 'utf8');
-    return true;
-  } catch (err) {
-    console.error('Error saving wishes:', err);
-    return false;
-  }
-}
 
 // Request Handler utama
 const handler = (req, res) => {
@@ -76,56 +44,10 @@ const handler = (req, res) => {
   }
 
   // REST API: Public Wishes Guestbook
-  if (pathname === '/api/wishes') {
-    if (req.method === 'GET') {
-      const wishes = getWishes();
-      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-      res.end(JSON.stringify(wishes));
-      return;
-    }
-
-    if (req.method === 'POST') {
-      let body = '';
-      req.on('data', chunk => {
-        body += chunk;
-        if (body.length > 1e5) {
-          req.connection.destroy();
-        }
-      });
-      req.on('end', () => {
-        try {
-          const parsed = JSON.parse(body);
-          const name = (parsed.name || '').trim().slice(0, 100);
-          const attendance = (parsed.attendance || 'Hadir').trim().slice(0, 50);
-          const message = (parsed.message || '').trim().slice(0, 1000);
-
-          if (!name || !message) {
-            res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
-            res.end(JSON.stringify({ error: 'Nama dan ucapan wajib diisi.' }));
-            return;
-          }
-
-          const newWish = {
-            id: 'w_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-            name,
-            attendance,
-            message,
-            time: Date.now()
-          };
-
-          const wishes = getWishes();
-          wishes.push(newWish);
-          saveWishes(wishes);
-
-          res.writeHead(201, { 'Content-Type': 'application/json; charset=utf-8' });
-          res.end(JSON.stringify({ success: true, wish: newWish, count: wishes.length }));
-        } catch (err) {
-          res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
-          res.end(JSON.stringify({ error: 'Format JSON tidak valid.' }));
-        }
-      });
-      return;
-    }
+  if (pathname === '/api/wishes' || pathname === '/api/wishes/') {
+    const wishesHandler = require('./api/wishes');
+    wishesHandler(req, res);
+    return;
   }
 
   if (pathname === '/' || pathname === '') {
