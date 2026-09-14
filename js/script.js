@@ -25,11 +25,6 @@ const CONFIG = {
     initial: "D",
     photo: "assets/bride_white.jpg?v=2"
   },
-  quote: {
-    arabic: "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ",
-    translation: "Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda bagi kaum yang berpikir.",
-    reference: "QS. Ar-Rum: 21"
-  },
   events: [
     {
       type: "Akad Nikah",
@@ -97,16 +92,7 @@ if (CONFIG.monogramImage) {
 } else {
   document.getElementById("monogram").innerHTML = `<span class="mono-letter mono-left">${CONFIG.groom.initial}</span><span class="mono-amp">&amp;</span><span class="mono-letter mono-right">${CONFIG.bride.initial}</span>`;
 }
-if (typeof CONFIG.quote === "object") {
-  document.getElementById("heroQuote").innerHTML = `
-    <div class="quote-arabic">${CONFIG.quote.arabic}</div>
-    <div class="quote-divider" aria-hidden="true"></div>
-    <div class="quote-translation">"${CONFIG.quote.translation}"</div>
-    <div class="quote-ref">${CONFIG.quote.reference}</div>
-  `;
-} else {
-  document.getElementById("heroQuote").textContent = CONFIG.quote;
-}
+
 document.getElementById("closingNames").innerHTML = CONFIG.groom.nickname + " &amp; " + CONFIG.bride.nickname;
 document.title = "Undangan Pernikahan " + CONFIG.groom.nickname + " & " + CONFIG.bride.nickname;
 

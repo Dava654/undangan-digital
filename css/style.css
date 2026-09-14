@@ -337,14 +337,7 @@ body {
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.30);
 }
 
-.gate-guest-label {
-  font-family: 'Outfit', sans-serif;
-  font-size: 11.5px;
-  color: var(--sage);
-  letter-spacing: 0.04em;
-  margin-bottom: 0.3rem;
-  font-weight: 500;
-}
+
 
 .gate-guest-name {
   font-family: 'Playfair Display', serif;
@@ -471,56 +464,6 @@ section {
   filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 26px rgba(184, 137, 46, 0.75));
 }
 
-.hero-lede {
-  max-width: 410px;
-  margin: 1.2rem auto 0;
-  background: var(--card-bg);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  border: none;
-  border-radius: 22px;
-  padding: 1.9rem 1.6rem 1.7rem;
-  box-shadow: var(--card-shadow);
-  text-align: center;
-}
-
-.quote-arabic {
-  font-family: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif;
-  font-size: 21px;
-  line-height: 2.15;
-  color: var(--ink);
-  direction: rtl;
-  font-weight: 700;
-  letter-spacing: 0;
-  margin-bottom: 0.8rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-}
-
-.quote-divider {
-  width: 52px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold-ochre), transparent);
-  margin: 0.9rem auto 1.1rem;
-  opacity: 0.85;
-}
-
-.quote-translation {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 16px;
-  line-height: 1.8;
-  color: var(--ink-soft);
-  font-style: italic;
-  margin-bottom: 0.75rem;
-}
-
-.quote-ref {
-  font-family: 'Outfit', sans-serif;
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  color: var(--gold-ochre);
-  text-transform: uppercase;
-}
 
 /* ---------- Couple ---------- */
 #couple {
