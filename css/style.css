@@ -222,155 +222,7 @@ body {
   50% { transform: translateY(-6px); }
 }
 
-/* =====================================================
-   Intro Overlay — Animasi Rumah Gadang
-   Sequence: slices masuk (0.6s) → tahan (1.2s) → fade out (0.7s)
-   Total: ~2.5s sebelum gate slide up
-   ===================================================== */
-#introOverlay {
-  position: fixed;
-  inset: 0;
-  max-width: 480px;
-  margin: 0 auto;
-  z-index: 9998;           /* tepat di bawah gate (50) saat gate masih ada, di atasnya saat gate hilang */
-  pointer-events: none;
-  overflow: hidden;
-  display: none;           /* Disembunyikan sampai JS mengaktifkannya */
-}
-
-#introOverlay.active {
-  display: block;
-}
-
-/* --- Slices ---
-   Masing-masing slice menampilkan SATU bagian dari cover_full.jpg
-   dan "terbang masuk" dari tepi ke posisi aslinya. */
-.intro-slice {
-  position: absolute;
-  background-image: url('../assets/cover/cover_full.jpg');
-  background-size: 100% 100%;   /* setiap slice scale ke ukurannya sendiri */
-  background-repeat: no-repeat;
-}
-
-/* Atas: 100% lebar × 50% tinggi, bagian atas gambar */
-.intro-slice--top {
-  top: 0; left: 0; right: 0;
-  height: 50%;
-  background-position: center top;
-  background-size: 100% 200%;  /* zoom 2x ke bawah agar pas */
-  transform: translateY(-102%);
-  animation: introSlideTop 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-/* Bawah: 100% lebar × 50% tinggi, bagian bawah gambar */
-.intro-slice--bottom {
-  bottom: 0; left: 0; right: 0;
-  height: 50%;
-  background-position: center bottom;
-  background-size: 100% 200%;
-  transform: translateY(102%);
-  animation: introSlideBottom 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-/* Kiri: 50% lebar × 100% tinggi, bagian kiri gambar */
-.intro-slice--left {
-  top: 0; left: 0; bottom: 0;
-  width: 50%;
-  background-position: left center;
-  background-size: 200% 100%;
-  transform: translateX(-102%);
-  animation: introSlideLeft 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
-}
-
-/* Kanan: 50% lebar × 100% tinggi, bagian kanan gambar */
-.intro-slice--right {
-  top: 0; right: 0; bottom: 0;
-  width: 50%;
-  background-position: right center;
-  background-size: 200% 100%;
-  transform: translateX(102%);
-  animation: introSlideRight 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
-}
-
-/* Pusat: foto penuh sebagai "penyatu" slices — muncul setelah slices berkumpul */
-.intro-center {
-  position: absolute;
-  inset: 0;
-  background: url('../assets/cover/cover_full.jpg') center center / cover no-repeat;
-  opacity: 0;
-  animation: introCenterReveal 0.4s ease-out 0.7s forwards;
-}
-
-/* Teks atas ilustrasi */
-.intro-text {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 2.4rem 1.6rem 3rem;
-  text-align: center;
-  background: linear-gradient(to top, rgba(20,30,22,0.82) 0%, transparent 100%);
-  opacity: 0;
-  animation: introTextReveal 0.5s ease-out 0.85s forwards;
-}
-
-.intro-text-eyebrow {
-  font-family: 'Outfit', sans-serif;
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(232, 211, 167, 0.85);
-  margin-bottom: 0.5rem;
-}
-
-.intro-text-names {
-  font-family: 'Mrs Saint Delafield', cursive;
-  font-size: 52px;
-  line-height: 1.1;
-  color: #FFFFFF;
-  text-shadow: 0 2px 18px rgba(0,0,0,0.8);
-}
-
-.intro-amp {
-  color: var(--gold-sand);
-}
-
-.intro-text-sub {
-  font-family: 'Outfit', sans-serif;
-  font-size: 12px;
-  color: rgba(255,255,255,0.75);
-  letter-spacing: 0.1em;
-  margin-top: 0.4rem;
-}
-
-/* Fade out seluruh overlay di akhir sequence */
-#introOverlay.fade-out {
-  animation: introFadeOut 0.7s ease-in forwards;
-}
-
-/* --- Keyframes --- */
-@keyframes introSlideTop {
-  to { transform: translateY(0); }
-}
-@keyframes introSlideBottom {
-  to { transform: translateY(0); }
-}
-@keyframes introSlideLeft {
-  to { transform: translateX(0); }
-}
-@keyframes introSlideRight {
-  to { transform: translateX(0); }
-}
-@keyframes introCenterReveal {
-  to { opacity: 1; }
-}
-@keyframes introTextReveal {
-  to { opacity: 1; }
-}
-@keyframes introFadeOut {
-  0%  { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.04); }
-}
-
-
+/* ---------- Gate / Cover (Foto Pasangan + Overlay Gelap) ---------- */
 #gate {
   position: fixed;
   inset: 0;
@@ -539,6 +391,152 @@ body {
   color: rgba(250, 251, 249, 0.7);
   margin-top: 0.85rem;
   letter-spacing: 0.02em;
+}
+
+/* ===== Intro Overlay (Animasi Bunga & Foto Mempelai) ===== */
+#introOverlay {
+  position: fixed;
+  inset: 0;
+  max-width: 480px;
+  margin: 0 auto;
+  z-index: 9000;
+  background: linear-gradient(160deg, #FAF8F5 0%, #F0EDE6 40%, #EAE4D7 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+}
+
+#introOverlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+#introOverlay.exit {
+  opacity: 0;
+  transition: opacity 0.6s ease 1.8s;
+  visibility: hidden;
+  transition: opacity 0.6s ease 1.8s, visibility 0s linear 2.4s;
+}
+
+/* Bunga kiri - masuk dari kiri bawah */
+.intro-flower--left {
+  position: absolute;
+  bottom: -30%;
+  left: -30%;
+  width: 70%;
+  padding-bottom: 70%;
+  background: url('../assets/cover/slice_left_bouquet.png') center / contain no-repeat;
+  opacity: 0;
+  transform: translate(-40px, 40px) rotate(-8deg);
+  transition: opacity 0.7s ease 0.2s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+}
+
+.intro-flower--right {
+  position: absolute;
+  bottom: -30%;
+  right: -30%;
+  width: 70%;
+  padding-bottom: 70%;
+  background: url('../assets/cover/slice_right_bouquet.png') center / contain no-repeat;
+  opacity: 0;
+  transform: translate(40px, 40px) rotate(8deg);
+  transition: opacity 0.7s ease 0.3s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
+}
+
+/* Foto pengantin dari kiri kanan */
+.intro-photo--groom {
+  position: absolute;
+  top: 0;
+  left: -8%;
+  width: 52%;
+  height: 68%;
+  background: url('../assets/groom_white.jpg') center top / cover no-repeat;
+  opacity: 0;
+  transform: translateY(-24px);
+  transition: opacity 0.7s ease 0.5s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s;
+}
+
+.intro-photo--bride {
+  position: absolute;
+  top: 0;
+  right: -8%;
+  width: 52%;
+  height: 68%;
+  background: url('../assets/bride_white.jpg') center top / cover no-repeat;
+  opacity: 0;
+  transform: translateY(-24px);
+  transition: opacity 0.7s ease 0.65s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.65s;
+}
+
+/* Konten teks tengah */
+.intro-center {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 38%;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s ease 0.9s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.9s;
+}
+
+.intro-monogram {
+  width: 90px;
+  height: 90px;
+  background: url('../assets/monogram_ad.png') center / contain no-repeat;
+  margin-bottom: 0.6rem;
+}
+
+.intro-tagline {
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: #7A6038;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+.intro-names {
+  font-family: 'Mrs Saint Delafield', cursive;
+  font-size: 48px;
+  color: #1E2D25;
+  line-height: 1.1;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.intro-amp {
+  color: #B8892E;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+}
+
+.intro-sub {
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  color: #8C621C;
+  letter-spacing: 0.1em;
+  margin-top: 0.3rem;
+  font-weight: 500;
+}
+
+/* State: semua elemen masuk saat overlay aktif */
+#introOverlay.active .intro-flower--left,
+#introOverlay.active .intro-flower--right,
+#introOverlay.active .intro-photo--groom,
+#introOverlay.active .intro-photo--bride,
+#introOverlay.active .intro-center {
+  opacity: 1;
+  transform: translate(0, 0) rotate(0deg);
 }
 
 /* ---------- Shared section styling ---------- */

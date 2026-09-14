@@ -92,20 +92,22 @@ if (q.get("to")) {
 }
 document.getElementById("gateNames").innerHTML = CONFIG.groom.nickname + ' <span class="gate-amp">&amp;</span> ' + CONFIG.bride.nickname;
 
+// Render nama di intro overlay
+const introNamesEl = document.querySelector(".intro-names");
+if (introNamesEl) {
+  introNamesEl.innerHTML = CONFIG.groom.nickname + ' <span class="intro-amp">&amp;</span> ' + CONFIG.bride.nickname;
+}
+
 if (CONFIG.monogramImage) {
   document.getElementById("monogram").innerHTML = `<img src="${CONFIG.monogramImage}" alt="Inisial ${CONFIG.groom.nickname} &amp; ${CONFIG.bride.nickname}" class="monogram-img">`;
 } else {
   document.getElementById("monogram").innerHTML = `<span class="mono-letter mono-left">${CONFIG.groom.initial}</span><span class="mono-amp">&amp;</span><span class="mono-letter mono-right">${CONFIG.bride.initial}</span>`;
 }
 if (typeof CONFIG.quote === "object") {
-  document.getElementById("heroQuote").innerHTML = `
-    <div class="quote-arabic">${CONFIG.quote.arabic}</div>
-    <div class="quote-divider" aria-hidden="true"></div>
-    <div class="quote-translation">"${CONFIG.quote.translation}"</div>
-    <div class="quote-ref">${CONFIG.quote.reference}</div>
-  `;
+  // Ayat Al-Qur'an dinonaktifkan per request
+  // document.getElementById("heroQuote").innerHTML = ...;
 } else {
-  document.getElementById("heroQuote").textContent = CONFIG.quote;
+  // quote teks biasa juga dinonaktifkan
 }
 document.getElementById("closingNames").innerHTML = CONFIG.groom.nickname + " &amp; " + CONFIG.bride.nickname;
 document.title = "Undangan Pernikahan " + CONFIG.groom.nickname + " & " + CONFIG.bride.nickname;
@@ -305,54 +307,62 @@ function openGate() {
   if (isGateOpened) return;
   isGateOpened = true;
 
-  const introOverlay = document.getElementById('introOverlay');
+  // Pastikan posisi scroll tepat di paling atas (0, 0)
+  window.scrollTo(0, 0);
 
-  // LANGKAH 1: Tampilkan overlay Rumah Gadang (animasi slices masuk)
-  if (introOverlay) {
-    introOverlay.classList.add('active');
-  }
+  // Putar Musik Latar
+  playBackgroundMusic();
 
-  // LANGKAH 2: Setelah ~1.8s (slices masuk + tahan sesaat), mulai fade-out overlay
-  setTimeout(() => {
-    if (introOverlay) {
-      introOverlay.classList.add('fade-out');
-    }
+  const introEl = document.getElementById("introOverlay");
 
-    // LANGKAH 3: Saat overlay fade-out selesai (0.7s), buka gate slide up + aktifkan halaman
+  if (introEl) {
+    // 1. Tampilkan intro overlay dengan animasi bunga & foto
+    introEl.classList.add("active");
+
+    // 2. Setelah animasi intro selesai (~2.5 detik), mulai tutup intro & buka gate
     setTimeout(() => {
-      // Sembunyikan overlay
-      if (introOverlay) {
-        introOverlay.style.display = 'none';
-      }
+      introEl.classList.add("exit");
 
-      // Pastikan posisi scroll tepat di paling atas
-      window.scrollTo(0, 0);
+      // Geser gate ke atas
+      if (gateEl) gateEl.classList.add("open");
 
-      // Animasi membuka gerbang cover ke atas
-      if (gateEl) {
-        gateEl.classList.add('open');
-      }
+      // Buka kunci scroll
+      document.body.classList.remove("gate-locked");
+      document.documentElement.classList.remove("gate-locked");
 
-      // Buka kunci scroll pada halaman
-      document.body.classList.remove('gate-locked');
-      document.documentElement.classList.remove('gate-locked');
+      // Tampilkan bottom nav
+      const bottomNav = document.getElementById("bottomNav");
+      if (bottomNav) bottomNav.classList.add("visible");
 
-      // Tampilkan Floating Bottom Navigation Bar
-      const bottomNav = document.getElementById('bottomNav');
-      if (bottomNav) {
-        bottomNav.classList.add('visible');
-      }
-
-      // Aktifkan animasi elemen di hero
+      // Aktifkan animasi hero
       setTimeout(() => {
         window.scrollTo(0, 0);
-        document.querySelectorAll('#hero .reveal, #hero .reveal-scale, #hero .reveal-left, #hero .reveal-right').forEach(el => {
-          el.classList.add('active');
+        document.querySelectorAll("#hero .reveal, #hero .reveal-scale, #hero .reveal-left, #hero .reveal-right").forEach(el => {
+          el.classList.add("active");
         });
       }, 350);
 
-    }, 700); // durasi fade-out overlay
-  }, 1800);  // durasi tahan animasi sebelum fade-out
+      // 3. Hapus intro overlay dari DOM setelah transisi selesai
+      setTimeout(() => {
+        introEl.remove();
+      }, 2500);
+
+    }, 2600);
+
+  } else {
+    // Fallback: langsung buka tanpa intro
+    if (gateEl) gateEl.classList.add("open");
+    document.body.classList.remove("gate-locked");
+    document.documentElement.classList.remove("gate-locked");
+    const bottomNav = document.getElementById("bottomNav");
+    if (bottomNav) bottomNav.classList.add("visible");
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.querySelectorAll("#hero .reveal, #hero .reveal-scale, #hero .reveal-left, #hero .reveal-right").forEach(el => {
+        el.classList.add("active");
+      });
+    }, 350);
+  }
 }
 
 // 1. Klik tombol "Buka Undangan"
