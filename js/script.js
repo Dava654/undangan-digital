@@ -305,34 +305,54 @@ function openGate() {
   if (isGateOpened) return;
   isGateOpened = true;
 
-  // Pastikan posisi scroll tepat di paling atas (0, 0)
-  window.scrollTo(0, 0);
+  const introOverlay = document.getElementById('introOverlay');
 
-  // Animasi membuka gerbang cover ke atas
-  if (gateEl) {
-    gateEl.classList.add("open");
+  // LANGKAH 1: Tampilkan overlay Rumah Gadang (animasi slices masuk)
+  if (introOverlay) {
+    introOverlay.classList.add('active');
   }
 
-  // Buka kunci scroll pada halaman
-  document.body.classList.remove("gate-locked");
-  document.documentElement.classList.remove("gate-locked");
-
-  // Tampilkan Floating Bottom Navigation Bar
-  const bottomNav = document.getElementById("bottomNav");
-  if (bottomNav) {
-    bottomNav.classList.add("visible");
-  }
-
-  // Putar Musik Latar & Tampilkan Tombol Kontrol Musik
-  playBackgroundMusic();
-
-  // Begitu gerbang terbuka, aktifkan animasi elemen di bagian atas (#hero) secara estetik
+  // LANGKAH 2: Setelah ~1.8s (slices masuk + tahan sesaat), mulai fade-out overlay
   setTimeout(() => {
-    window.scrollTo(0, 0);
-    document.querySelectorAll("#hero .reveal, #hero .reveal-scale, #hero .reveal-left, #hero .reveal-right").forEach(el => {
-      el.classList.add("active");
-    });
-  }, 350);
+    if (introOverlay) {
+      introOverlay.classList.add('fade-out');
+    }
+
+    // LANGKAH 3: Saat overlay fade-out selesai (0.7s), buka gate slide up + aktifkan halaman
+    setTimeout(() => {
+      // Sembunyikan overlay
+      if (introOverlay) {
+        introOverlay.style.display = 'none';
+      }
+
+      // Pastikan posisi scroll tepat di paling atas
+      window.scrollTo(0, 0);
+
+      // Animasi membuka gerbang cover ke atas
+      if (gateEl) {
+        gateEl.classList.add('open');
+      }
+
+      // Buka kunci scroll pada halaman
+      document.body.classList.remove('gate-locked');
+      document.documentElement.classList.remove('gate-locked');
+
+      // Tampilkan Floating Bottom Navigation Bar
+      const bottomNav = document.getElementById('bottomNav');
+      if (bottomNav) {
+        bottomNav.classList.add('visible');
+      }
+
+      // Aktifkan animasi elemen di hero
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        document.querySelectorAll('#hero .reveal, #hero .reveal-scale, #hero .reveal-left, #hero .reveal-right').forEach(el => {
+          el.classList.add('active');
+        });
+      }, 350);
+
+    }, 700); // durasi fade-out overlay
+  }, 1800);  // durasi tahan animasi sebelum fade-out
 }
 
 // 1. Klik tombol "Buka Undangan"
