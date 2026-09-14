@@ -92,22 +92,20 @@ if (q.get("to")) {
 }
 document.getElementById("gateNames").innerHTML = CONFIG.groom.nickname + ' <span class="gate-amp">&amp;</span> ' + CONFIG.bride.nickname;
 
-// Render nama di intro overlay
-const introNamesEl = document.querySelector(".intro-names");
-if (introNamesEl) {
-  introNamesEl.innerHTML = CONFIG.groom.nickname + ' <span class="intro-amp">&amp;</span> ' + CONFIG.bride.nickname;
-}
-
 if (CONFIG.monogramImage) {
   document.getElementById("monogram").innerHTML = `<img src="${CONFIG.monogramImage}" alt="Inisial ${CONFIG.groom.nickname} &amp; ${CONFIG.bride.nickname}" class="monogram-img">`;
 } else {
   document.getElementById("monogram").innerHTML = `<span class="mono-letter mono-left">${CONFIG.groom.initial}</span><span class="mono-amp">&amp;</span><span class="mono-letter mono-right">${CONFIG.bride.initial}</span>`;
 }
 if (typeof CONFIG.quote === "object") {
-  // Ayat Al-Qur'an dinonaktifkan per request
-  // document.getElementById("heroQuote").innerHTML = ...;
+  document.getElementById("heroQuote").innerHTML = `
+    <div class="quote-arabic">${CONFIG.quote.arabic}</div>
+    <div class="quote-divider" aria-hidden="true"></div>
+    <div class="quote-translation">"${CONFIG.quote.translation}"</div>
+    <div class="quote-ref">${CONFIG.quote.reference}</div>
+  `;
 } else {
-  // quote teks biasa juga dinonaktifkan
+  document.getElementById("heroQuote").textContent = CONFIG.quote;
 }
 document.getElementById("closingNames").innerHTML = CONFIG.groom.nickname + " &amp; " + CONFIG.bride.nickname;
 document.title = "Undangan Pernikahan " + CONFIG.groom.nickname + " & " + CONFIG.bride.nickname;
@@ -310,59 +308,31 @@ function openGate() {
   // Pastikan posisi scroll tepat di paling atas (0, 0)
   window.scrollTo(0, 0);
 
-  // Putar Musik Latar
+  // Animasi membuka gerbang cover ke atas
+  if (gateEl) {
+    gateEl.classList.add("open");
+  }
+
+  // Buka kunci scroll pada halaman
+  document.body.classList.remove("gate-locked");
+  document.documentElement.classList.remove("gate-locked");
+
+  // Tampilkan Floating Bottom Navigation Bar
+  const bottomNav = document.getElementById("bottomNav");
+  if (bottomNav) {
+    bottomNav.classList.add("visible");
+  }
+
+  // Putar Musik Latar & Tampilkan Tombol Kontrol Musik
   playBackgroundMusic();
 
-  const introEl = document.getElementById("introOverlay");
-
-  if (introEl) {
-    // 1. Tampilkan intro overlay dengan animasi bunga & foto
-    introEl.classList.add("active");
-
-    // 2. Setelah animasi intro selesai (~2.5 detik), mulai tutup intro & buka gate
-    setTimeout(() => {
-      introEl.classList.add("exit");
-
-      // Geser gate ke atas
-      if (gateEl) gateEl.classList.add("open");
-
-      // Buka kunci scroll
-      document.body.classList.remove("gate-locked");
-      document.documentElement.classList.remove("gate-locked");
-
-      // Tampilkan bottom nav
-      const bottomNav = document.getElementById("bottomNav");
-      if (bottomNav) bottomNav.classList.add("visible");
-
-      // Aktifkan animasi hero
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-        document.querySelectorAll("#hero .reveal, #hero .reveal-scale, #hero .reveal-left, #hero .reveal-right").forEach(el => {
-          el.classList.add("active");
-        });
-      }, 350);
-
-      // 3. Hapus intro overlay dari DOM setelah transisi selesai
-      setTimeout(() => {
-        introEl.remove();
-      }, 2500);
-
-    }, 2600);
-
-  } else {
-    // Fallback: langsung buka tanpa intro
-    if (gateEl) gateEl.classList.add("open");
-    document.body.classList.remove("gate-locked");
-    document.documentElement.classList.remove("gate-locked");
-    const bottomNav = document.getElementById("bottomNav");
-    if (bottomNav) bottomNav.classList.add("visible");
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.querySelectorAll("#hero .reveal, #hero .reveal-scale, #hero .reveal-left, #hero .reveal-right").forEach(el => {
-        el.classList.add("active");
-      });
-    }, 350);
-  }
+  // Begitu gerbang terbuka, aktifkan animasi elemen di bagian atas (#hero) secara estetik
+  setTimeout(() => {
+    window.scrollTo(0, 0);
+    document.querySelectorAll("#hero .reveal, #hero .reveal-scale, #hero .reveal-left, #hero .reveal-right").forEach(el => {
+      el.classList.add("active");
+    });
+  }, 350);
 }
 
 // 1. Klik tombol "Buka Undangan"

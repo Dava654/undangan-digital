@@ -222,18 +222,18 @@ body {
   50% { transform: translateY(-6px); }
 }
 
-/* ---------- Gate / Cover (Foto Pasangan + Overlay Gelap) ---------- */
+/* ---------- Gate / Cover (Buka Geser dari Bawah ke Atas) ---------- */
 #gate {
   position: fixed;
   inset: 0;
   max-width: 480px;
   margin: 0 auto;
-  background:
-    linear-gradient(180deg,
-      rgba(43, 58, 49, 0.55) 0%,
-      rgba(91, 115, 99, 0.12) 22%,
-      rgba(250, 251, 249, 0.0) 45%,
-      rgba(91, 115, 99, 0.16) 72%,
+  background: 
+    linear-gradient(180deg, 
+      rgba(43, 58, 49, 0.55) 0%, 
+      rgba(91, 115, 99, 0.12) 22%, 
+      rgba(250, 251, 249, 0.0) 45%, 
+      rgba(91, 115, 99, 0.16) 72%, 
       rgba(43, 58, 49, 0.65) 100%
     ),
     url('../assets/cover_couple.jpg?v=w1') center 18% / cover no-repeat;
@@ -258,6 +258,7 @@ body {
   visibility: hidden;
   pointer-events: none;
 }
+
 
 .gate-content {
   position: relative;
@@ -347,196 +348,36 @@ body {
 
 .gate-guest-name {
   font-family: 'Playfair Display', serif;
-  font-size: 19px;
+  font-size: 21px;
   font-weight: 600;
-  color: var(--forest);
+  color: var(--gold-ochre);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .btn-open {
   font-family: 'Outfit', sans-serif;
   font-size: 13.5px;
   font-weight: 600;
-  letter-spacing: 0.05em;
-  background: linear-gradient(135deg, #B8892E 0%, #E8D3A7 50%, #B8892E 100%);
-  background-size: 200% auto;
+  letter-spacing: 0.06em;
+  background: linear-gradient(135deg, #B8892E 0%, #D6BA84 50%, #B8892E 100%);
   color: #1A2820;
-  border: 1.5px solid #FFFFFF;
+  border: 1.5px solid #FAFBF9;
   border-radius: 999px;
-  padding: 0.88rem 2.3rem;
+  padding: 0.85rem 2.2rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 8px 25px rgba(184, 137, 46, 0.45);
-  animation: pulseGlow 2.5s infinite 1s;
-}
-
-.btn-open .btn-icon {
-  display: block;
-  width: 16px;
-  height: 16px;
-  stroke: #1A2820;
+  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: pulseGlow 2.5s infinite;
+  box-shadow: 0 8px 25px rgba(184, 137, 46, 0.5);
 }
 
 .btn-open:hover {
-  background-position: right center;
+  background: linear-gradient(135deg, #D6BA84 0%, #FAFBF9 50%, #D6BA84 100%);
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(184, 137, 46, 0.65);
-}
-
-.gate-disclaimer {
-  font-family: 'Outfit', sans-serif;
-  font-size: 10.5px;
-  color: rgba(250, 251, 249, 0.7);
-  margin-top: 0.85rem;
-  letter-spacing: 0.02em;
-}
-
-/* ===== Intro Overlay (Animasi Bunga & Foto Mempelai) ===== */
-#introOverlay {
-  position: fixed;
-  inset: 0;
-  max-width: 480px;
-  margin: 0 auto;
-  z-index: 9000;
-  background: linear-gradient(160deg, #FAF8F5 0%, #F0EDE6 40%, #EAE4D7 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.5s ease, visibility 0s linear 0.5s;
-}
-
-#introOverlay.active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-}
-
-#introOverlay.exit {
-  opacity: 0;
-  transition: opacity 0.6s ease 1.8s;
-  visibility: hidden;
-  transition: opacity 0.6s ease 1.8s, visibility 0s linear 2.4s;
-}
-
-/* Bunga kiri - masuk dari kiri bawah */
-.intro-flower--left {
-  position: absolute;
-  bottom: -30%;
-  left: -30%;
-  width: 70%;
-  padding-bottom: 70%;
-  background: url('../assets/cover/slice_left_bouquet.png') center / contain no-repeat;
-  opacity: 0;
-  transform: translate(-40px, 40px) rotate(-8deg);
-  transition: opacity 0.7s ease 0.2s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
-}
-
-.intro-flower--right {
-  position: absolute;
-  bottom: -30%;
-  right: -30%;
-  width: 70%;
-  padding-bottom: 70%;
-  background: url('../assets/cover/slice_right_bouquet.png') center / contain no-repeat;
-  opacity: 0;
-  transform: translate(40px, 40px) rotate(8deg);
-  transition: opacity 0.7s ease 0.3s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
-}
-
-/* Foto pengantin dari kiri kanan */
-.intro-photo--groom {
-  position: absolute;
-  top: 0;
-  left: -8%;
-  width: 52%;
-  height: 68%;
-  background: url('../assets/groom_white.jpg') center top / cover no-repeat;
-  opacity: 0;
-  transform: translateY(-24px);
-  transition: opacity 0.7s ease 0.5s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s;
-}
-
-.intro-photo--bride {
-  position: absolute;
-  top: 0;
-  right: -8%;
-  width: 52%;
-  height: 68%;
-  background: url('../assets/bride_white.jpg') center top / cover no-repeat;
-  opacity: 0;
-  transform: translateY(-24px);
-  transition: opacity 0.7s ease 0.65s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.65s;
-}
-
-/* Konten teks tengah */
-.intro-center {
-  position: relative;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin-top: 38%;
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.7s ease 0.9s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.9s;
-}
-
-.intro-monogram {
-  width: 90px;
-  height: 90px;
-  background: url('../assets/monogram_ad.png') center / contain no-repeat;
-  margin-bottom: 0.6rem;
-}
-
-.intro-tagline {
-  font-family: 'Outfit', sans-serif;
-  font-size: 11px;
-  letter-spacing: 0.22em;
-  color: #7A6038;
-  text-transform: uppercase;
-  font-weight: 500;
-  margin-bottom: 0.2rem;
-}
-
-.intro-names {
-  font-family: 'Mrs Saint Delafield', cursive;
-  font-size: 48px;
-  color: #1E2D25;
-  line-height: 1.1;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.08);
-}
-
-.intro-amp {
-  color: #B8892E;
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-}
-
-.intro-sub {
-  font-family: 'Outfit', sans-serif;
-  font-size: 12px;
-  color: #8C621C;
-  letter-spacing: 0.1em;
-  margin-top: 0.3rem;
-  font-weight: 500;
-}
-
-/* State: semua elemen masuk saat overlay aktif */
-#introOverlay.active .intro-flower--left,
-#introOverlay.active .intro-flower--right,
-#introOverlay.active .intro-photo--groom,
-#introOverlay.active .intro-photo--bride,
-#introOverlay.active .intro-center {
-  opacity: 1;
-  transform: translate(0, 0) rotate(0deg);
+  box-shadow: 0 12px 30px rgba(184, 137, 46, 0.7);
+  border-color: #FAFBF9;
 }
 
 /* ---------- Shared section styling ---------- */

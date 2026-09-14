@@ -6,13 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Undangan Pernikahan</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="shortcut icon" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&family=Mrs+Saint+Delafield&family=Outfit:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,600&family=Pinyon+Script&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20260914_01">
+  <link rel="stylesheet" href="css/style.css?v=20260914_r1">
   <style>
     /* Direct override to guarantee opacity is immediately visible */
     .couple-card {
@@ -30,55 +29,27 @@
        Gate / Cover Sampul Depan (Buka dari Bawah ke Atas)
        ======================================================= -->
   <div id="gate">
-    <!-- Watermark Motif Songket Melayu -->
+    <!-- Lapisan Watermark Motif Songket Khas Melayu -->
     <div class="songket-pattern-overlay" aria-hidden="true"></div>
-
     <div class="gate-content">
       <div class="gate-top">
         <div class="gate-eyebrow">The Wedding Of</div>
-        <div class="gate-names" id="gateNames">Andri <span class="gate-amp">&amp;</span> Andina</div>
+        <div class="gate-names" id="gateNames">Nama <span class="gate-amp">&amp;</span> Nama</div>
         <div class="gate-sub">Undangan Pernikahan</div>
       </div>
-
       <div class="gate-bottom">
         <div class="gate-guest-box">
           <div class="gate-guest-label">Kepada Yth. Bapak/Ibu/Saudara/i:</div>
           <div class="gate-guest-name" id="gateGuest">Tamu Undangan</div>
         </div>
-
         <button class="btn-open" id="openBtn" type="button">
-          <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-          </svg>
           <span>Buka Undangan</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
         </button>
-
-        <div class="gate-disclaimer">
-          <i>*Mohon maaf jika ada kesalahan dalam penulisan nama / gelar.</i>
-        </div>
       </div>
-    </div>
-  </div>
-
-  <!-- =======================================================
-       Intro Overlay: Animasi Bunga & Foto Pasangan
-       (muncul setelah klik Buka Undangan, sebelum halaman terbuka)
-       ======================================================= -->
-  <div id="introOverlay" aria-hidden="true">
-    <!-- Bunga kiri bawah masuk dari kiri -->
-    <div class="intro-flower intro-flower--left"></div>
-    <!-- Bunga kanan bawah masuk dari kanan -->
-    <div class="intro-flower intro-flower--right"></div>
-    <!-- Foto mempelai dari atas -->
-    <div class="intro-photo intro-photo--groom"></div>
-    <div class="intro-photo intro-photo--bride"></div>
-    <!-- Teks & monogram di tengah -->
-    <div class="intro-center">
-      <div class="intro-monogram"></div>
-      <div class="intro-tagline">Dengan segala kerendahan hati</div>
-      <div class="intro-names">Andri <span class="intro-amp">&amp;</span> Andina</div>
-      <div class="intro-sub">Mengundang kehadiran Anda</div>
     </div>
   </div>
 
@@ -112,6 +83,7 @@
           <path d="M98 10 C95 7, 91 9, 91 10 C91 11, 95 13, 98 10 Z" fill="#A9825A" opacity="0.6" />
         </svg>
       </div>
+      <div class="hero-lede reveal delay-2" id="heroQuote"></div>
     </section>
 
     <!-- Mempelai (Couple) Section -->
@@ -362,7 +334,7 @@
   </audio>
 
   <!-- JavaScript Logika Undangan, Efek Kelopak & Animasi Scroll -->
-  <script src="js/script.js?v=20260914_03"></script>
+  <script src="js/script.js?v=20260914_r1"></script>
 </body>
 
 </html>
