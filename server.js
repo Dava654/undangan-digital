@@ -43,8 +43,8 @@ function resolveFile(pathname) {
     .replace(/^[\/\\]+/, '');
 
   const candidates = [
-    path.join(ROOT_DIR, 'public', safePath),
     path.join(ROOT_DIR, safePath),
+    path.join(ROOT_DIR, 'public', safePath),
   ];
 
   for (const candidate of candidates) {

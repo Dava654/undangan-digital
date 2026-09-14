@@ -222,18 +222,18 @@ body {
   50% { transform: translateY(-6px); }
 }
 
-/* ---------- Gate / Cover (Buka Geser dari Bawah ke Atas) ---------- */
+/* ---------- Gate / Cover (Foto Pasangan + Overlay Gelap) ---------- */
 #gate {
   position: fixed;
   inset: 0;
   max-width: 480px;
   margin: 0 auto;
-  background: 
-    linear-gradient(180deg, 
-      rgba(43, 58, 49, 0.55) 0%, 
-      rgba(91, 115, 99, 0.12) 22%, 
-      rgba(250, 251, 249, 0.0) 45%, 
-      rgba(91, 115, 99, 0.16) 72%, 
+  background:
+    linear-gradient(180deg,
+      rgba(43, 58, 49, 0.55) 0%,
+      rgba(91, 115, 99, 0.12) 22%,
+      rgba(250, 251, 249, 0.0) 45%,
+      rgba(91, 115, 99, 0.16) 72%,
       rgba(43, 58, 49, 0.65) 100%
     ),
     url('../assets/cover_couple.jpg?v=w1') center 18% / cover no-repeat;
@@ -258,7 +258,6 @@ body {
   visibility: hidden;
   pointer-events: none;
 }
-
 
 .gate-content {
   position: relative;
@@ -348,36 +347,50 @@ body {
 
 .gate-guest-name {
   font-family: 'Playfair Display', serif;
-  font-size: 21px;
+  font-size: 19px;
   font-weight: 600;
-  color: var(--gold-ochre);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  color: var(--forest);
 }
 
 .btn-open {
   font-family: 'Outfit', sans-serif;
   font-size: 13.5px;
   font-weight: 600;
-  letter-spacing: 0.06em;
-  background: linear-gradient(135deg, #B8892E 0%, #D6BA84 50%, #B8892E 100%);
+  letter-spacing: 0.05em;
+  background: linear-gradient(135deg, #B8892E 0%, #E8D3A7 50%, #B8892E 100%);
+  background-size: 200% auto;
   color: #1A2820;
-  border: 1.5px solid #FAFBF9;
+  border: 1.5px solid #FFFFFF;
   border-radius: 999px;
-  padding: 0.85rem 2.2rem;
+  padding: 0.88rem 2.3rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  animation: pulseGlow 2.5s infinite;
-  box-shadow: 0 8px 25px rgba(184, 137, 46, 0.5);
+  gap: 9px;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 25px rgba(184, 137, 46, 0.45);
+  animation: pulseGlow 2.5s infinite 1s;
+}
+
+.btn-open .btn-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  stroke: #1A2820;
 }
 
 .btn-open:hover {
-  background: linear-gradient(135deg, #D6BA84 0%, #FAFBF9 50%, #D6BA84 100%);
+  background-position: right center;
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(184, 137, 46, 0.7);
-  border-color: #FAFBF9;
+  box-shadow: 0 12px 30px rgba(184, 137, 46, 0.65);
+}
+
+.gate-disclaimer {
+  font-family: 'Outfit', sans-serif;
+  font-size: 10.5px;
+  color: rgba(250, 251, 249, 0.7);
+  margin-top: 0.85rem;
+  letter-spacing: 0.02em;
 }
 
 /* ---------- Shared section styling ---------- */
