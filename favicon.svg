@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="16" fill="#2B3A31"/>
+  <!-- Mahkota bunga / ornamen emas -->
+  <circle cx="32" cy="32" r="10" fill="none" stroke="#C9A55A" stroke-width="1.5"/>
+  <!-- Kelopak atas -->
+  <ellipse cx="32" cy="19" rx="4" ry="7" fill="#C9A55A" opacity="0.85"/>
+  <!-- Kelopak bawah -->
+  <ellipse cx="32" cy="45" rx="4" ry="7" fill="#C9A55A" opacity="0.85"/>
+  <!-- Kelopak kiri -->
+  <ellipse cx="19" cy="32" rx="7" ry="4" fill="#C9A55A" opacity="0.85"/>
+  <!-- Kelopak kanan -->
+  <ellipse cx="45" cy="32" rx="7" ry="4" fill="#C9A55A" opacity="0.85"/>
+  <!-- Kelopak diagonal kiri atas -->
+  <ellipse cx="22.5" cy="22.5" rx="4" ry="7" fill="#C9A55A" opacity="0.65" transform="rotate(-45 22.5 22.5)"/>
+  <!-- Kelopak diagonal kanan atas -->
+  <ellipse cx="41.5" cy="22.5" rx="4" ry="7" fill="#C9A55A" opacity="0.65" transform="rotate(45 41.5 22.5)"/>
+  <!-- Kelopak diagonal kiri bawah -->
+  <ellipse cx="22.5" cy="41.5" rx="4" ry="7" fill="#C9A55A" opacity="0.65" transform="rotate(45 22.5 41.5)"/>
+  <!-- Kelopak diagonal kanan bawah -->
+  <ellipse cx="41.5" cy="41.5" rx="4" ry="7" fill="#C9A55A" opacity="0.65" transform="rotate(-45 41.5 41.5)"/>
+  <!-- Titik tengah -->
+  <circle cx="32" cy="32" r="4.5" fill="#F0DCA0"/>
+  <circle cx="32" cy="32" r="2" fill="#C9A55A"/>
+</svg>

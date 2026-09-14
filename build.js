@@ -29,4 +29,8 @@ for (const folder of ['css', 'js', 'assets']) {
   if (fs.existsSync(src)) copyRecursive(src, path.join(outDir, folder));
 }
 
+// Salin favicon
+const faviconSrc = path.join(rootDir, 'favicon.svg');
+if (fs.existsSync(faviconSrc)) fs.copyFileSync(faviconSrc, path.join(outDir, 'favicon.svg'));
+
 console.log('Build selesai — file statis disalin ke public/');
